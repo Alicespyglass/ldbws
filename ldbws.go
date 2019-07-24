@@ -59,16 +59,16 @@ func main() {
 		".asmx",
 	)
 
-	// payload
-	var buffer bytes.Buffer
-	// Envelope
-	buffer.WriteString("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://thalesgroup.com/RTTI/2017-10-01/ldb/\">")
-	// Header
-	buffer.WriteString("<soapenv:Header><AccessToken xmlns=\"http://thalesgroup.com/RTTI/2013-11-28/Token/types\"><TokenValue>[INSERTTOKEN]</TokenValue></AccessToken></soapenv:Header><soapenv:Body><ser:GetArrBoardWithDetailsRequest><ser:numRows>10</ser:numRows><ser:crs>SAJ</ser:crs><ser:filterCrs>LBG</ser:filterCrs><ser:filterType>to</ser:filterType></ser:GetArrBoardWithDetailsRequest></soapenv:Body></soapenv:Envelope>")
-	// Body
-	buffer.WriteString("<soapenv:Body><ser:GetArrBoardWithDetailsRequest><ser:numRows>10</ser:numRows><ser:crs>SAJ</ser:crs><ser:filterCrs>LBG</ser:filterCrs><ser:filterType>to</ser:filterType></ser:GetArrBoardWithDetailsRequest></soapenv:Body></soapenv:Envelope>")
+	envelope := "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:ser='http://thalesgroup.com/RTTI/2017-10-01/ldb/'>"
 
-	payload := []byte(strings.TrimSpace(buffer.String()))
+	tokenValue := "INSERT_TOKEN"
+	header := "<soapenv:Header><AccessToken xmlns='http://thalesgroup.com/RTTI/2013-11-28/Token/types'><TokenValue>" + tokenValue + "</TokenValue></AccessToken></soapenv:Header>"
+
+	currentStation := "SAJ"
+	targetStation := "LBG"
+	body := "<soapenv:Body><ser:GetArrBoardWithDetailsRequest><ser:numRows>10</ser:numRows><ser:crs>" + currentStation + "</ser:crs><ser:filterCrs>" + targetStation + "</ser:filterCrs><ser:filterType>to</ser:filterType></ser:GetArrBoardWithDetailsRequest></soapenv:Body></soapenv:Envelope>"
+
+	payload := []byte(strings.TrimSpace(envelope + header + body))
 
 	httpMethod := "POST"
 
@@ -84,7 +84,7 @@ func main() {
 	// set headers
 	req.Header.Set("Content-type", "text/xml")
 
-	log.Printf("\n[*REQ*]: %+v", req)
+	log.Printf("\n[*REQ*]: %+v\n", req)
 
 	// prepare the client req
 	client := &http.Client{}
@@ -95,6 +95,8 @@ func main() {
 	res, err := client.Do(req)
 
 	result := new(TrainData)
+	log.Printf("result: %+v\n", result)
+
 	err = xml.NewDecoder(res.Body).Decode(result)
 	if err != nil {
 		log.Fatal("Error on unmarshaling xml. ", err.Error())
@@ -104,6 +106,6 @@ func main() {
 	log.Println("-> Everything is good, printing users data")
 
 	// print the users data
-	fmt.Printf("\nresult.Body.Body.Details.TrainServices.Service: %+v", result.Body.Body.Details.TrainServices.Service)
-	fmt.Printf("\nTrain data.body %v", result.Body)
+	fmt.Printf("\nresult.Body.Body.Details.TrainServices.Service: %+v\n", result.Body.Body.Details.TrainServices.Service)
+	fmt.Printf("\nTrain data.body %+v", result.Body)
 }
