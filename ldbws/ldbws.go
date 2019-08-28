@@ -1,4 +1,4 @@
-package main
+package ldbws
 
 import (
 	"bytes"
@@ -64,7 +64,7 @@ type LocationName struct {
 	LocationName string `xml:"locationName"`
 }
 
-func main() {
+func LDBWS() {
 	// wsdl service url
 	url := fmt.Sprintf("%s%s%s%s",
 		"https://lite.realtime.nationalrail.co.uk",
@@ -75,7 +75,7 @@ func main() {
 
 	envelope := "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:ser='http://thalesgroup.com/RTTI/2017-10-01/ldb/'>"
 
-	tokenValue := "<token>"
+	tokenValue := "ff8aea3f-099c-48ea-bcb4-9bb53572bcfd"
 	header := "<soapenv:Header><AccessToken xmlns='http://thalesgroup.com/RTTI/2013-11-28/Token/types'><TokenValue>" + tokenValue + "</TokenValue></AccessToken></soapenv:Header>"
 
 	currentStation := "SAJ"
