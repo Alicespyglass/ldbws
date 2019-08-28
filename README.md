@@ -2,6 +2,18 @@
 
 Service for making SOAP requests to the Network Rail API in Go
 
+### Getting Started
+Run the server
+```
+$ go run main.go
+```
+
+Make a request
+```
+$ curl localhost:8080
+```
+
+
 ### Resources
 [Documentation for Network Rail Live Departure Board Web Service (LDBWS)](http://lite.realtime.nationalrail.co.uk/openldbws/)
 
