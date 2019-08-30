@@ -8,16 +8,13 @@ Run the server
 $ go run main.go
 ```
 
-Make a request
-```
-$ curl localhost:8080
-```
-
 
 ### Resources
 [Documentation for Network Rail Live Departure Board Web Service (LDBWS)](http://lite.realtime.nationalrail.co.uk/openldbws/)
 
 [Register for Access / Token](https://opendata.nationalrail.co.uk/)
+
+[Webapp](https://www.sohamkamani.com/blog/2017/09/13/how-to-build-a-web-application-in-golang/)
 
 #### Example SOAP request
 ```
