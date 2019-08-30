@@ -64,7 +64,7 @@ type LocationName struct {
 	LocationName string `xml:"locationName"`
 }
 
-func LDBWS() {
+func LDBWS(w http.ResponseWriter, r *http.Request) {
 	// wsdl service url
 	url := fmt.Sprintf("%s%s%s%s",
 		"https://lite.realtime.nationalrail.co.uk",
@@ -75,7 +75,7 @@ func LDBWS() {
 
 	envelope := "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:ser='http://thalesgroup.com/RTTI/2017-10-01/ldb/'>"
 
-	tokenValue := "ff8aea3f-099c-48ea-bcb4-9bb53572bcfd"
+	tokenValue := "<tokenvalue>"
 	header := "<soapenv:Header><AccessToken xmlns='http://thalesgroup.com/RTTI/2013-11-28/Token/types'><TokenValue>" + tokenValue + "</TokenValue></AccessToken></soapenv:Header>"
 
 	currentStation := "SAJ"
@@ -142,4 +142,10 @@ func LDBWS() {
 	jsonData, err := json.Marshal(train)
 	fmt.Println(string(jsonData))
 
+	if err != nil {
+		fmt.Println(fmt.Errorf("Error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Write(jsonData)
 }
